@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MainApp",
+      "request": "launch",
+      "mainClass": "MainApp",
+      "projectName": "final-project-MatchesMalone7_c5ea6e7e"
+    },
+    {
+      "type": "java",
       "name": "Run Main",
       "request": "launch",
       "mainClass": "Main",
