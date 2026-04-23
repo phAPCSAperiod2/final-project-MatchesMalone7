@@ -1,7 +1,7 @@
 /**
  * The Filter class represents one air filter the user wants to track.
  * It stores the filter's name, its time limit, and how many hours
- * have already been used. This class does not handle 
+ * have already been used. This class does not handle
  * countdown logic (its in TimerManger).
  * Java doc comments were made by Mircosoft Copilot.
  */
@@ -46,7 +46,7 @@ public class Filter {
 
     /**
      * Sets a new time limit for the filter.
-     * 
+     *
      * @param newLimit the new number of hours the filter should last
      */
     public void setTimeLimit(int newLimit) {
@@ -60,7 +60,7 @@ public class Filter {
 
     /**
      * Adds usage hours to the filter.
-     * 
+     *
      * @param hours the number of hours to add
      */
     public void addUsage(int hours) {
@@ -74,7 +74,7 @@ public class Filter {
 
     /**
      * Checks whether the filter has reached or exceeded its time limit.
-     * 
+     *
      * @return true if the filter is expired, false otherwise
      */
     public boolean isExpired() {
@@ -83,7 +83,7 @@ public class Filter {
 
     /**
      * Returns a readable summary of the filter's status.
-     * 
+     *
      * @return a string describing the filter
      */
     @Override
@@ -91,5 +91,14 @@ public class Filter {
         return "Filter: " + nameOfFilter +
                 " | Used: " + hoursUsed + " / " + timeLimit + " hours" +
                 (isExpired() ? " (EXPIRED)" : "");
+    }
+
+    /**
+     * Updating the time of the filter being used.
+     *
+     * @param i
+     */
+    public void updateTimeUsed(int i) {
+        addUsage(i);
     }
 }
