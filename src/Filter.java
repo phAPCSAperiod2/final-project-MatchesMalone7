@@ -2,7 +2,7 @@
  * The Filter class represents one air filter the user wants to track.
  * It stores the filter's name, its time limit, and how many hours
  * have already been used. This class does not handle
- * countdown logic (its in TimerManger).
+ * countdown logic (in TimerManger).
  * Java doc comments were made by Mircosoft Copilot.
  */
 public class Filter {

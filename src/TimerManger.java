@@ -67,7 +67,7 @@ public class TimerManger {
      * - Applies the attached filter (if one exists)
      * - Stops the timer automatically when the countdown reaches zero
      *
-     * This method should be called repeatedly (e.g., inside a loop or timer)
+     * This method should be called repeatedly (inside a loop or timer)
      * to simulate the passage of time.
      */
     public void tick() {
@@ -93,4 +93,45 @@ public class TimerManger {
         return countdownValue == 0;
     }
 
+    // Getters and Setters
+
+    /**
+     * Returns the current countdown value.
+     *
+     * @return the countdown value as an integer
+     */
+    public int getCountdownValue() {
+        return countdownValue;
+    }
+
+    /**
+     * Sets the countdown value, ensuring it is not negative.
+     * Values below zero are ignored.
+     *
+     * @param value the new countdown value to set
+     */
+    public void setCountdownValue(int value) {
+        if (value >= 0) {
+            this.countdownValue = value;
+        }
+    }
+
+    /**
+     * Indicates whether the countdown or timer is currently running.
+     *
+     * @return true if running, false otherwise
+     */
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    /**
+     * Returns the currently active filter.
+     *
+     * @return the current {@code Filter} instance, or null if none is set
+     */
+    public Filter getCurrentFilter() {
+        return currentFilter;
+    }
 }
+
