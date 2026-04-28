@@ -67,7 +67,7 @@ public class TimerManger {
      * - Applies the attached filter (if one exists)
      * - Stops the timer automatically when the countdown reaches zero
      *
-     * This method should be called repeatedly (e.g., inside a loop or timer)
+     * This method should be called repeatedly (inside a loop or timer)
      * to simulate the passage of time.
      */
     public void tick() {
@@ -97,16 +97,27 @@ public class TimerManger {
 
     /**
      * Returns the current countdown value.
+<<<<<<< HEAD
      * 
      * @return the remaining countdown value
+=======
+     *
+     * @return the countdown value as an integer
+>>>>>>> 5381e5f90fb8a51d479a51805107902cead3e81c
      */
     public int getCountdownValue() {
         return countdownValue;
     }
 
     /**
+<<<<<<< HEAD
      * Sets the countdown value if the provided value is non‑negative.
      * 
+=======
+     * Sets the countdown value, ensuring it is not negative.
+     * Values below zero are ignored.
+     *
+>>>>>>> 5381e5f90fb8a51d479a51805107902cead3e81c
      * @param value the new countdown value to set
      */
     public void setCountdownValue(int value) {
@@ -116,20 +127,33 @@ public class TimerManger {
     }
 
     /**
+<<<<<<< HEAD
      * Indicates whether the countdown timer is currently running.
      * 
      * @return true if the timer is running, false otherwise
+=======
+     * Indicates whether the countdown or timer is currently running.
+     *
+     * @return true if running, false otherwise
+>>>>>>> 5381e5f90fb8a51d479a51805107902cead3e81c
      */
     public boolean isRunning() {
         return isRunning;
     }
 
     /**
+<<<<<<< HEAD
      * Returns the filter currently attached to the timer manager.
      * 
      * @return the active Filter, or null if none is attached
+=======
+     * Returns the currently active filter.
+     *
+     * @return the current {@code Filter} instance, or null if none is set
+>>>>>>> 5381e5f90fb8a51d479a51805107902cead3e81c
      */
     public Filter getCurrentFilter() {
         return currentFilter;
     }
 }
+
