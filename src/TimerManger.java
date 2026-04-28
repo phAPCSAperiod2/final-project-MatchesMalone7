@@ -85,12 +85,51 @@ public class TimerManger {
     }
 
     /**
-     * Determines whether the countdown has reached zero.
-     *
-     * @return true if no time remains in the countdown; false otherwise
+     * Checks if the countdown has finished
+     * 
+     * @return true if countdownValue is 0, false otherwise
      */
     public boolean isFinished() {
         return countdownValue == 0;
     }
 
+    // Getters and Setters
+
+    /**
+     * Returns the current countdown value.
+     * 
+     * @return the remaining countdown value
+     */
+    public int getCountdownValue() {
+        return countdownValue;
+    }
+
+    /**
+     * Sets the countdown value if the provided value is non‑negative.
+     * 
+     * @param value the new countdown value to set
+     */
+    public void setCountdownValue(int value) {
+        if (value >= 0) {
+            this.countdownValue = value;
+        }
+    }
+
+    /**
+     * Indicates whether the countdown timer is currently running.
+     * 
+     * @return true if the timer is running, false otherwise
+     */
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    /**
+     * Returns the filter currently attached to the timer manager.
+     * 
+     * @return the active Filter, or null if none is attached
+     */
+    public Filter getCurrentFilter() {
+        return currentFilter;
+    }
 }
