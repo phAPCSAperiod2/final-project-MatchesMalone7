@@ -49,6 +49,7 @@ public class MainApp {
         boolean running = true;
 
         while (running) {
+            displayExpirationWarnings();
             displayMenu();
             int choice = handleUserChoice();
 
@@ -66,8 +67,11 @@ public class MainApp {
                     viewFilters();
                     break;
                 case 5:
+                    resetFilter();
+                    break;
+                case 6:
                     running = false;
-                    System.out.println("Exiting program...");
+                    System.out.println("\n✓ Exiting program...\n");
                     break;
                 default:
                     System.out.println("Invalid choice.");
@@ -79,12 +83,14 @@ public class MainApp {
      * Prints the main menu options to the console.
      */
     public void displayMenu() {
-        System.out.println("\n=== AIR FILTER TRACKER ===");
-        System.out.println("1. Create a new filter");
-        System.out.println("2. Start countdown timer");
-        System.out.println("3. Pause countdown timer");
-        System.out.println("4. View filter grid");
-        System.out.println("5. Exit");
+        System.out.println("\n╔════ AIR FILTER TRACKER ════╗");
+        System.out.println("║ 1. Create a new filter     ║");
+        System.out.println("║ 2. Start countdown timer   ║");
+        System.out.println("║ 3. Pause countdown timer   ║");
+        System.out.println("║ 4. View filter grid        ║");
+        System.out.println("║ 5. Reset a filter          ║");
+        System.out.println("║ 6. Exit                    ║");
+        System.out.println("╚════════════════════════════╝");
         System.out.print("Choose an option: ");
     }
 
@@ -146,7 +152,7 @@ public class MainApp {
         Filter f = new Filter(name, limit);
         filterGrid.get(row).add(f);
 
-        System.out.println("Filter added to row " + (row + 1) + ": " + f);
+        System.out.println("✓ Filter added to row " + (row + 1) + ": " + f);
     }
 
     /**
@@ -190,7 +196,7 @@ public class MainApp {
         timer.setCountdownValue(countdown);
 
         timer.startCountdown();
-        System.out.println("Timer started for filter: " + selected.getName());
+        System.out.println("✓ Timer started for filter: " + selected.getName());
     }
 
     /**
@@ -198,28 +204,173 @@ public class MainApp {
      */
     public void pauseTimer() {
         timer.pauseCountdown();
-        System.out.println("Timer paused.");
+        System.out.println("✓ Timer paused.");
+    }
+
+    /**
+     * Displays expiration warnings for any filters that are expired or near
+     * expiration.
+     * Called at the start of each main loop iteration.
+     */
+    public void displayExpirationWarnings() {
+        ArrayList<Filter> warningFilters = new ArrayList<>();
+
+        for (ArrayList<Filter> row : filterGrid) {
+            for (Filter f : row) {
+                if (f.isExpired()) {
+                    warningFilters.add(f);
+                } else {
+                    int used = f.getHoursUsed();
+                    int limit = f.getTimeLimit();
+                    int percentage = (limit > 0) ? (used * 100) / limit : 0;
+                    if (percentage >= 75) {
+                        warningFilters.add(f);
+                    }
+                }
+            }
+        }
+
+        if (!warningFilters.isEmpty()) {
+            System.out.println("\n⚠️  FILTER ALERTS:");
+            for (Filter f : warningFilters) {
+                if (f.isExpired()) {
+                    System.out.println("   🔴 '" + f.getName() + "' has EXPIRED!");
+                } else {
+                    int used = f.getHoursUsed();
+                    int limit = f.getTimeLimit();
+                    int percentage = (used * 100) / limit;
+                    System.out.println("   🟠 '" + f.getName() + "' is " + percentage + "% used. Replace soon!");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Allows the user to reset a filter's usage hours back to zero.
+     * Prompts the user to select a row and filter to reset.
+     */
+    public void resetFilter() {
+        System.out.print("Select row (1-3): ");
+        int row = getPositiveInt() - 1;
+
+        if (row < 0 || row >= filterGrid.size()) {
+            System.out.println("Invalid row.");
+            return;
+        }
+
+        ArrayList<Filter> rowList = filterGrid.get(row);
+
+        if (rowList.isEmpty()) {
+            System.out.println("No filters in this row.");
+            return;
+        }
+
+        System.out.println("Select a filter to reset:");
+        for (int i = 0; i < rowList.size(); i++) {
+            System.out.println((i + 1) + ". " + rowList.get(i).getName());
+        }
+
+        int choice = getPositiveInt() - 1;
+
+        if (choice < 0 || choice >= rowList.size()) {
+            System.out.println("Invalid filter selection.");
+            return;
+        }
+
+        Filter selected = rowList.get(choice);
+        selected.resetUsage();
+
+        System.out.println("✓ '" + selected.getName() + "' has been reset to 0 hours.");
     }
 
     /**
      * Displays all filters in the 3-row grid.
-     * Shows each row and the filters stored within it.
+     * Shows each row and the filters stored within it,
+     * including usage percentages and status insights.
      */
     public void viewFilters() {
-        System.out.println("\n=== FILTER GRID STATUS ===");
+        System.out.println("\n╔════ FILTER GRID STATUS ════╗");
 
         for (int row = 0; row < filterGrid.size(); row++) {
-            System.out.println("Row " + (row + 1) + ":");
+            System.out.println("║ Row " + (row + 1) + ":                       ║");
 
             ArrayList<Filter> rowList = filterGrid.get(row);
 
             if (rowList.isEmpty()) {
-                System.out.println("  (no filters)");
+                System.out.println("║   (no filters)               ║");
             } else {
                 for (Filter f : rowList) {
-                    System.out.println("  " + f);
+                    System.out.println("║ " + formatFilterDisplay(f) + " ║");
+                    System.out.println("║ " + formatFilterInsights(f) + " ║");
                 }
             }
+        }
+        System.out.println("╚════════════════════════════╝");
+    }
+
+    /**
+     * Formats a filter's display with usage percentage and status.
+     *
+     * @param f the Filter to format
+     * @return a formatted string with filter name and status
+     */
+    private String formatFilterDisplay(Filter f) {
+        int used = f.getHoursUsed();
+        int limit = f.getTimeLimit();
+        int percentage = (limit > 0) ? (used * 100) / limit : 0;
+
+        String status;
+        if (f.isExpired()) {
+            status = "🔴 EXPIRED";
+        } else if (percentage >= 75) {
+            status = "🟠 CRITICAL";
+        } else if (percentage >= 50) {
+            status = "🟡 WARNING";
+        } else {
+            status = "🟢 OK";
+        }
+
+        String bar = buildUsageBar(percentage);
+        return String.format("  %s | %3d%% %s | %s", f.getName(), percentage, bar, status);
+    }
+
+    /**
+     * Builds a visual representation of filter usage.
+     *
+     * @param percentage the usage percentage (0-100)
+     * @return a string representation of a progress bar
+     */
+    private String buildUsageBar(int percentage) {
+        int filled = percentage / 10;
+        StringBuilder bar = new StringBuilder("[");
+        for (int i = 0; i < 10; i++) {
+            bar.append(i < filled ? "█" : "░");
+        }
+        bar.append("]");
+        return bar.toString();
+    }
+
+    /**
+     * Generates insight text for a filter based on its usage.
+     *
+     * @param f the Filter to analyze
+     * @return a string with actionable insights
+     */
+    private String formatFilterInsights(Filter f) {
+        int used = f.getHoursUsed();
+        int limit = f.getTimeLimit();
+        int percentage = (limit > 0) ? (used * 100) / limit : 0;
+        int remaining = Math.max(0, limit - used);
+
+        if (f.isExpired()) {
+            return "   Filter has expired. Time to replace!";
+        } else if (percentage >= 75) {
+            return String.format("   Only %d hours left. Replace soon!", remaining);
+        } else if (percentage >= 50) {
+            return String.format("   %d hours of usage remaining.", remaining);
+        } else {
+            return String.format("   Filter is in good condition (%d hours left).", remaining);
         }
     }
 
