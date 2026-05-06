@@ -22,7 +22,7 @@ Code was made by Ayres Wright with some assist by Microsoft Copilot for suggesti
   - Status insights
 
 
-## 🧩 Class Overview
+## Class Overview
 
 ### **Filter**
 Represents a single air filter.
@@ -68,3 +68,5 @@ Helper methods:
 - `getPositiveInt()` — validates numeric input
 - `formatFilterDisplay()` — builds progress bar + status
 - `formatFilterInsights()` — gives usage advice
+
+<img width="852" height="501" alt="filters-Page-1 drawio (1)" src="https://github.com/user-attachments/assets/88fd1493-8234-4de9-b920-55f588b55cbc" />
